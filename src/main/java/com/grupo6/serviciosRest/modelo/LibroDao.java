@@ -46,11 +46,9 @@ public class LibroDao {
 		return listaLibros;
 	}
 	
-	public synchronized void add(Libro libro) {		
+	public void add(Libro libro) {		
 		libro.setId(contador++);
-		if(isAbleLibro(libro)) {				
-			listaLibros.add(libro);				
-		}else contador--;
+		listaLibros.add(libro);				
 	}
 	
 	public Libro delete(int idLibro) {
@@ -70,8 +68,7 @@ public class LibroDao {
 		}
 	}
 	
-	
-	private boolean isAbleLibro(Libro libro) {
+	public boolean isAbleLibro(Libro libro) {
 		if(libro.getTitulo() == "")
 			return false;
 		

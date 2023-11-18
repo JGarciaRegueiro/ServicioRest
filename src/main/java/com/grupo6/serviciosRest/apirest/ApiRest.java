@@ -26,9 +26,11 @@ public class ApiRest {
 	private LibroDao ldao;
 	
 	@PostMapping()
-	public ResponseEntity<Libro> altaLibro(@RequestBody Libro libro){
-		ldao.add(libro);
-		return new ResponseEntity<Libro>(libro,HttpStatus.CREATED);
+	public ResponseEntity<?> altaLibro(@RequestBody Libro libro){
+		if(ldao.isAbleLibro(libro)) {
+			ldao.add(libro);
+			return new ResponseEntity<Libro>(libro,HttpStatus.CREATED);
+		}else return new ResponseEntity<String>("El título ya existe",HttpStatus.CONFLICT);
 	}
 	
 	@DeleteMapping("/{idLibro}")
@@ -41,8 +43,10 @@ public class ApiRest {
 	@PutMapping("/{idLibro}")
 	public ResponseEntity<?> modificarLibro(@PathVariable int idLibro, @RequestBody Libro libro){
 		if (ldao.getLibro(idLibro) != null) {
-			libro.setId(idLibro);
-			return new ResponseEntity<>(ldao.update(libro),HttpStatus.OK);
+			if (ldao.isAbleLibro(libro)) {
+				libro.setId(idLibro);
+				return new ResponseEntity<>(ldao.update(libro),HttpStatus.OK);
+			}else return new ResponseEntity<String>("El título ya existe",HttpStatus.CONFLICT);
 		}else return new ResponseEntity<String>("El libro no existe",HttpStatus.NOT_FOUND);
 	}
 	
@@ -51,7 +55,6 @@ public class ApiRest {
 		if (ldao.getLibro(idLibro) != null) {
 			return new ResponseEntity<>(ldao.getLibro(idLibro),HttpStatus.OK);
 		}else return new ResponseEntity<String>("El libro no existe",HttpStatus.NOT_FOUND);
-		
 	}
 	
 	@GetMapping()
