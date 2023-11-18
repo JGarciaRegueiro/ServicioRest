@@ -18,13 +18,13 @@ public class LibroDao {
 	    Libro libro2 = new Libro(contador++, "La sombra del viento", "Misterio Literario", 9.0);
 	    Libro libro3 = new Libro(contador++, "Cien años de soledad", "Realismo mágico ediciones", 9.7);
 	    Libro libro4 = new Libro(contador++, "El código da vinci", "Enigma editorial", 8.2);
-	    Libro libro5 = new Libro(contador++, "Moby Dick", "Aventuras en el mar", 7.8);
-
+	    Libro libro5 = new Libro(contador++, "Moby Dick", "Aventuras en el mar", 7.8);	    
+	    
 	    listaLibros.add(libro1);
 	    listaLibros.add(libro2);
 	    listaLibros.add(libro3);
 	    listaLibros.add(libro4);
-	    listaLibros.add(libro5);
+	    listaLibros.add(libro5);	  
 	}
 	
 	public Libro getLibro(int idLibro) {
@@ -46,9 +46,11 @@ public class LibroDao {
 		return listaLibros;
 	}
 	
-	public void add(Libro libro) {
+	public synchronized void add(Libro libro) {		
 		libro.setId(contador++);
-		listaLibros.add(libro);
+		if(isAbleLibro(libro)) {				
+			listaLibros.add(libro);				
+		}else contador--;
 	}
 	
 	public Libro delete(int idLibro) {
@@ -60,11 +62,24 @@ public class LibroDao {
 	}
 	
 	public Libro update(Libro libro) {
-		try {
+		try {			
 			listaLibros.set(listaLibros.indexOf(getLibro(libro.getId())), libro);
 			return getLibro(libro.getId());
 		}catch(IndexOutOfBoundsException iobe) {
 			return null;
 		}
+	}
+	
+	
+	private boolean isAbleLibro(Libro libro) {
+		if(libro.getTitulo() == "")
+			return false;
+		
+		for(int i = 0; i < listaLibros.size(); i++) {			
+			if(listaLibros.get(i).getTitulo().toLowerCase().equals(libro.getTitulo().toLowerCase()))				
+				return false;	
+		}
+		
+		return true;
 	}
 }

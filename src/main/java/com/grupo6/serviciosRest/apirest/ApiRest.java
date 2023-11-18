@@ -25,20 +25,20 @@ public class ApiRest {
 	@Autowired
 	private LibroDao ldao;
 	
-	@PostMapping("/alta")
+	@PostMapping()
 	public ResponseEntity<Libro> altaLibro(@RequestBody Libro libro){
 		ldao.add(libro);
 		return new ResponseEntity<Libro>(libro,HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/baja/{idLibro}")
+	@DeleteMapping("/{idLibro}")
 	public ResponseEntity<?> bajaLibro(@PathVariable int idLibro){
 		if (ldao.getLibro(idLibro) != null) {
 			return new ResponseEntity<>(ldao.delete(idLibro),HttpStatus.OK);
 		} else return new ResponseEntity<String>("El libro no existe",HttpStatus.NOT_FOUND);
 	}
 	
-	@PutMapping("/modificar/{idLibro}")
+	@PutMapping("/{idLibro}")
 	public ResponseEntity<?> modificarLibro(@PathVariable int idLibro, @RequestBody Libro libro){
 		if (ldao.getLibro(idLibro) != null) {
 			libro.setId(idLibro);
@@ -46,7 +46,7 @@ public class ApiRest {
 		}else return new ResponseEntity<String>("El libro no existe",HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping("/consultar/{idLibro}")
+	@GetMapping("/{idLibro}")
 	public ResponseEntity<?> consultarLibro(@PathVariable int idLibro) {
 		if (ldao.getLibro(idLibro) != null) {
 			return new ResponseEntity<>(ldao.getLibro(idLibro),HttpStatus.OK);
@@ -54,7 +54,7 @@ public class ApiRest {
 		
 	}
 	
-	@GetMapping("/listado")
+	@GetMapping()
 	public List<Libro> consultarListado() {
 		return ldao.getListado();
 	}
