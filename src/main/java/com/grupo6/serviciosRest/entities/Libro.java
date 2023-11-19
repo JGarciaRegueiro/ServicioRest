@@ -2,6 +2,10 @@ package com.grupo6.serviciosRest.entities;
 
 import java.io.Serializable;
 
+/**
+ * Clase que representa un libro.
+ */
+
 public class Libro implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -9,6 +13,9 @@ public class Libro implements Serializable {
 	private String titulo;
 	private String editorial;
 	private double nota;
+	
+	
+	// Constructores 
 	
 	public Libro() {
 		super();
@@ -21,7 +28,9 @@ public class Libro implements Serializable {
 		this.editorial = editorial;
 		this.nota = nota;
 	}
-
+	
+	// Getters and Setters
+	
 	public int getId() {
 		return id;
 	}
@@ -54,6 +63,8 @@ public class Libro implements Serializable {
 		this.nota = nota;
 	}
 
+	// Métodos sobrescritos
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
